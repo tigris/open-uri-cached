@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'open-uri-cached'
-  s.version = '0.0.1'
+  s.version = '0.0.2'
   s.email = 'rubygems@tigris.id.au'
   s.homepage = 'http://github.com/tigris/open-uri-cached'
   s.description = 'OpenURI with transparent disk caching'

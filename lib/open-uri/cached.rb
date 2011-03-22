@@ -5,14 +5,8 @@ module OpenURI
   class << self
     alias original_open_uri open_uri #:nodoc:
     def open_uri(uri, *rest, &block)
-      response = Cache.get(uri.to_s)
-
-      unless response
-        response = original_open_uri(uri, *rest).read
-        Cache.set(uri.to_s, response)
-      end
-
-      response = StringIO.new(response)
+      response = Cache.get(uri.to_s) ||
+                 Cache.set(uri.to_s, original_open_uri(uri, *rest))
 
       if block_given?
         begin
@@ -30,16 +24,73 @@ module OpenURI
     @cache_path = '/tmp/open-uri'
 
     class << self
+      ##
+      # Retrieve file content and meta data from cache
+      # @param [String] key
+      # @return [StringIO]
       def get(key)
         filename = filename_from_url(key)
         # TODO: head request to determine last_modified vs file modtime
-        File.exists?(filename) ? File.read(filename) : nil
+
+        # Read metadata, if it exists
+        meta = YAML::load(File.read("#{filename}.meta")) if File.exists?("#{filename}.meta")
+
+        f = File.exists?(filename) ? StringIO.new(File.read(filename)) : nil
+
+        # Add meta accessors
+        if meta && f
+          f.instance_variable_set(:"@meta", meta)
+          
+          def f.meta
+            @meta
+          end
+          def f.base_uri
+            @meta[:base_uri]
+          end
+          def f.content_type
+            @meta[:content_type]
+          end
+          def f.charset
+            @meta[:charset]
+          end
+          def f.content_encoding
+            @meta[:content_encoding]
+          end
+          def f.last_modified
+            @meta[:last_modified]
+          end
+          def f.status
+            @meta[:status]
+          end
+        end
+        
+        f
       end
 
+      # Cache file content and metadata
+      # @param [String] key
+      #   URL of content to be cached
+      # @param [StringIO] value
+      #   value to be cached, typically StringIO returned from `original_open_uri`
+      # @return [StringIO]
+      #   Returns value
       def set(key, value)
         filename = filename_from_url(key)
         mkpath(filename)
-        File.open(filename, 'w'){|f| f.write value }
+
+        # Save metadata in a parallel file
+        if value.respond_to?(:meta)
+          filename_meta = "#{filename}.meta"
+          meta = value.meta
+          meta[:status] = value.status if value.respond_to?(:status)
+          meta[:base_uri] = value.base_uri if value.respond_to?(:base_uri)
+          File.open(filename_meta, 'w') {|f| YAML::dump(meta, f)}
+        end
+
+        # Save file contents
+        File.open(filename, 'w'){|f| f.write value.read }
+        value.rewind
+        value
       end
 
       protected
