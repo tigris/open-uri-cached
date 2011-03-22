@@ -83,7 +83,7 @@ module OpenURI
           filename_meta = "#{filename}.meta"
           meta = value.meta
           meta[:status] = value.status if value.respond_to?(:status)
-          meta[:content_type] = value.base_uri if value.respond_to?(:content_type)
+          meta[:content_type] = value.content_type if value.respond_to?(:content_type)
           meta[:base_uri] = value.base_uri if value.respond_to?(:base_uri)
           File.open(filename_meta, 'w') {|f| YAML::dump(meta, f)}
         end
