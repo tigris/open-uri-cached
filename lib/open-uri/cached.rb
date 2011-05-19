@@ -35,7 +35,7 @@ module OpenURI
         # Read metadata, if it exists
         meta = YAML::load(File.read("#{filename}.meta")) if File.exists?("#{filename}.meta")
 
-        f = File.exists?(filename) ? StringIO.new(File.read(filename)) : nil
+        f = File.exists?(filename) ? StringIO.new(File.open(filename, "rb") { |f| f.read }) : nil
 
         # Add meta accessors
         if meta && f
@@ -85,11 +85,11 @@ module OpenURI
           meta[:status] = value.status if value.respond_to?(:status)
           meta[:content_type] = value.content_type if value.respond_to?(:content_type)
           meta[:base_uri] = value.base_uri if value.respond_to?(:base_uri)
-          File.open(filename_meta, 'w') {|f| YAML::dump(meta, f)}
+          File.open(filename_meta, 'wb') {|f| YAML::dump(meta, f)}
         end
 
         # Save file contents
-        File.open(filename, 'w'){|f| f.write value.read }
+        File.open(filename, 'wb'){|f| f.write value.read }
         value.rewind
         value
       end
