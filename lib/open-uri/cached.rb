@@ -24,6 +24,8 @@ module OpenURI
     @cache_path = '/tmp/open-uri'
 
     class << self
+      attr_accessor :cache_path
+
       ##
       # Retrieve file content and meta data from cache
       # @param [String] key
