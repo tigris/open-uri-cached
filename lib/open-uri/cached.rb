@@ -21,7 +21,7 @@ module OpenURI
   end
 
   class Cache
-    @cache_path = '/tmp/open-uri'
+    @cache_path = "/tmp/open-uri-#{Process.uid}"
 
     class << self
       attr_accessor :cache_path
