@@ -21,7 +21,7 @@ module OpenURI
   end
 
   class Cache
-    @cache_path = '/tmp/open-uri'
+    @cache_path = "/tmp/open-uri-#{Process.uid}"
 
     class << self
       attr_accessor :cache_path
@@ -94,6 +94,23 @@ module OpenURI
         File.open(filename, 'wb'){|f| f.write value.read }
         value.rewind
         value
+      end
+
+      # Invalidate cache for a key, optionally if older than time givan
+      # @param [String] key
+      #   URL of content to be invalidated
+      # @param [Time] time
+      #   (optional): the maximum age at which the cached value is still acceptable
+      # @return
+      #   Returns 1 if a cached value was invalidated, false otherwise
+      def invalidate(key, time = Time.now)
+        filename = filename_from_url(key)
+        stat = File.stat(filename)
+        if stat.mtime < time
+          File.delete(filename)
+        end
+      rescue Errno::ENOENT
+        false
       end
 
       protected
