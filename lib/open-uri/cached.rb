@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'digest/sha1'
+require 'yaml'
 
 module OpenURI
   class << self
