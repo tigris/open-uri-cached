@@ -106,10 +106,7 @@ module OpenURI
       #   Returns 1 if a cached value was invalidated, false otherwise
       def invalidate(key, time = Time.now)
         filename = filename_from_url(key)
-        stat = File.stat(filename)
-        if stat.mtime < time
-          File.delete(filename)
-        end
+        File.delete(filename) if File.stat(filename).mtime < time
       rescue Errno::ENOENT
         false
       end
