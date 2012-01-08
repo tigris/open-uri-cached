@@ -43,7 +43,7 @@ module OpenURI
         # Add meta accessors
         if meta && f
           f.instance_variable_set(:"@meta", meta)
-          
+
           def f.meta
             @meta
           end
@@ -66,7 +66,7 @@ module OpenURI
             @meta[:status]
           end
         end
-        
+
         f
       end
 
