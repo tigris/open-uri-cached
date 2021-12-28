@@ -33,15 +33,12 @@ module OpenURI
       # @return [StringIO]
       def get(key)
         filename = filename_from_url(key)
+        meta_filename = "#{filename}.meta"
         # TODO: head request to determine last_modified vs file modtime
 
         # Read metadata, if it exists
-        if File.exist?("#{filename}.meta")
-          if YAML.respond_to?(:unsafe_load)
-            meta = YAML.unsafe_load(File.read("#{filename}.meta"))
-          else
-            meta = YAML.load(File.read("#{filename}.meta"))
-          end
+        if File.exist?(meta_filename)
+          meta = YAML.respond_to?(:unsafe_load_file) ? YAML.unsafe_load_file(meta_filename) : YAML.load_file(meta_filename)
         end
 
         f = File.exist?(filename) ? StringIO.new(File.open(filename, "rb") { |fd| fd.read }) : nil
