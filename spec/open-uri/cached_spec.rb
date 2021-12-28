@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'fileutils'
 require 'spec_helper'
 
 describe 'OpenURI::Cache' do
@@ -10,7 +9,7 @@ describe 'OpenURI::Cache' do
   end
 
   after do
-    FileUtils.rm_r(OpenURI::Cache.cache_path, force: true, secure: true)
+    OpenURI::Cache.invalidate_all!
   end
 
   context 'initial request' do

@@ -1,5 +1,6 @@
-require 'open-uri'
 require 'digest/sha1'
+require 'fileutils'
+require 'open-uri'
 require 'yaml'
 
 module OpenURI
@@ -115,6 +116,11 @@ module OpenURI
         File.delete(filename) if File.stat(filename).mtime < time
       rescue Errno::ENOENT
         false
+      end
+
+      # Invalidate all caches we know about
+      def invalidate_all!
+        FileUtils.rm_r(@cache_path, force: true, secure: true)
       end
 
       protected
