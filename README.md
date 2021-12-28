@@ -11,4 +11,10 @@ Require the library
 
 ## Configuring
 
-OpenURI::Cache.cache_path = '/tmp/open-uri'
+`OpenURI::Cache.cache_path = '/tmp/open-uri'`
+
+## Invalidating
+
+`OpenURI::Cache.invalidate('https://example.com/')`
+
+`OpenURI::Cache.invalidate_all!`
