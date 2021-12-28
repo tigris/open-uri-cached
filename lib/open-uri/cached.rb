@@ -36,7 +36,13 @@ module OpenURI
         # TODO: head request to determine last_modified vs file modtime
 
         # Read metadata, if it exists
-        meta = YAML::load(File.read("#{filename}.meta")) if File.exist?("#{filename}.meta")
+        if File.exist?("#{filename}.meta")
+          if YAML.respond_to?(:unsafe_load)
+            meta = YAML.unsafe_load(File.read("#{filename}.meta"))
+          else
+            meta = YAML.load(File.read("#{filename}.meta"))
+          end
+        end
 
         f = File.exist?(filename) ? StringIO.new(File.open(filename, "rb") { |fd| fd.read }) : nil
 
