@@ -36,9 +36,9 @@ module OpenURI
         # TODO: head request to determine last_modified vs file modtime
 
         # Read metadata, if it exists
-        meta = YAML::load(File.read("#{filename}.meta")) if File.exists?("#{filename}.meta")
+        meta = YAML::load(File.read("#{filename}.meta")) if File.exist?("#{filename}.meta")
 
-        f = File.exists?(filename) ? StringIO.new(File.open(filename, "rb") { |f| f.read }) : nil
+        f = File.exist?(filename) ? StringIO.new(File.open(filename, "rb") { |f| f.read }) : nil
 
         # Add meta accessors
         if meta && f
@@ -124,7 +124,7 @@ module OpenURI
             full.push(dir)
             dir = full.join('/')
             next if dir.to_s == ''
-            Dir.mkdir(dir) unless File.exists?(dir)
+            Dir.mkdir(dir) unless File.exist?(dir)
           end
         end
     end
