@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Gem::Specification.new do |s|
   s.name = 'open-uri-cached'
   s.version = '0.0.5'
@@ -7,4 +9,7 @@ Gem::Specification.new do |s|
   s.authors = ['Danial Pearce']
   s.summary = %Q(Do a lot of site scraping but take lots of attempts at parsing the content before reaching your end result? This gem is for you. But wait, there's more... Ok, no there isn't.)
   s.files = %w(README.md LICENSE lib/open-uri/cached.rb)
+
+  s.add_development_dependency 'rspec', '~> 3.10.0'
+  s.add_development_dependency 'webmock', '~> 3.14.0'
 end
