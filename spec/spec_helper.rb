@@ -14,9 +14,9 @@ require 'webmock/rspec'
 RSpec.configure do |config|
   config.order = :random
   Kernel.srand config.seed
-  
-  config.before(:each) do
-    WebMock.disable_net_connect!
+
+  config.before :each do
+    WebMock.disable_net_connect!(allow_localhost: true)
 
     stub_request(:get, 'https://rubygems.org/').to_return(
       status: 200,
