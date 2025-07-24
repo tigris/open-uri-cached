@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.summary = %Q(Do a lot of site scraping but take lots of attempts at parsing the content before reaching your end result? This gem is for you. But wait, there's more... Ok, no there isn't.)
   s.files = %w(README.md LICENSE lib/open-uri/cached.rb)
 
-  s.add_development_dependency 'rspec', '~> 3.10.0'
-  s.add_development_dependency 'webmock', '~> 3.14.0'
+  s.add_development_dependency 'rspec', '~> 3.10'
+  s.add_development_dependency 'webmock', '~> 3.14'
 end

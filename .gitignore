@@ -1,3 +1,4 @@
+/.tool-versions
 /.bundle
 /Gemfile.lock
 /pkg/*
