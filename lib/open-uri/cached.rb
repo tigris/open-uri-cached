@@ -1,6 +1,7 @@
 require 'digest/sha1'
 require 'fileutils'
 require 'open-uri'
+require 'securerandom'
 require 'yaml'
 
 module OpenURI
@@ -23,7 +24,7 @@ module OpenURI
   end
 
   class Cache
-    @cache_path = "/tmp/open-uri-#{Process.uid}"
+    @cache_path = "/tmp/open-uri-#{SecureRandom.uuid}"
 
     class << self
       attr_accessor :cache_path
@@ -37,13 +38,7 @@ module OpenURI
         # TODO: head request to determine last_modified vs file modtime
 
         # Read metadata, if it exists
-        if File.exist?("#{filename}.meta")
-          if YAML.respond_to?(:unsafe_load)
-            meta = YAML.unsafe_load(File.read("#{filename}.meta"))
-          else
-            meta = YAML.load(File.read("#{filename}.meta"))
-          end
-        end
+        meta = YAML.unsafe_load(File.read("#{filename}.meta")) if File.exist?("#{filename}.meta")
 
         f = File.exist?(filename) ? StringIO.new(File.open(filename, "rb") { |fd| fd.read }) : nil
 
