@@ -1,5 +1,11 @@
 # Changelog
 
+# 2.0.0
+
+* Remove support for ruby versions 2.7, 3.0 and 3.1
+* Add support for ruby versions 3.2, 3.3 and 3.4
+* Use `SecureRandom.uuid` for a safer cache path
+
 # 1.0.0
 
 * Add support for ruby 3.1 and above

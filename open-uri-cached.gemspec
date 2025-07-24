@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'open-uri-cached'
-  s.version = '1.0.0'
+  s.version = '2.0.0'
   s.email = 'danial.pearce@gmail.com'
   s.homepage = 'https://github.com/tigris/open-uri-cached'
   s.description = 'OpenURI with transparent disk caching'
